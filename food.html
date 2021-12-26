@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+        .main
+        {
+            height: 100vh;
+            width: 100%;
+            background-image: url(./baked-chicken-wings-asian-style_2829-10159.jpg);
+            background-size: 100% 100%;
+            overflow: hidden;
+        }
+        input
+        {
+            position: relative;
+            height: 50px;
+            text-align: center;
+            width: 40%;
+            border: 1px solid  cyan;
+            font-family: sans-serif;
+             color: black;
+            font-weight: bold;
+            /* box-shadow: 2px 2px 20px 10px red; */
+            background-image: url(./pic2.jpg);
+            left: 30%;
+            top: 20vh;
+            font-size: 20px;
+            border-radius: 5px;
+            outline: none;
+        }
+        .ul1
+        {
+            height: 50vh;
+            width: 40%;
+            position: relative;
+            top: 25vh;
+            left: 30%;
+            border: 1px solid white;
+            box-shadow: 2px 2px 20px 10px black;
+            display: flex;
+            flex-direction: column;
+            
+            background-color: black;
+            overflow-y: scroll;
+            background-image:linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),url(./assorted-indian-recipes-food-various_79295-7226.jpg);
+            background-size: 100% 100%;
+
+        }
+        h1
+        {
+            color:yellow;
+            font-style: italic;
+            font-size: 70px;
+            text-align: center;
+            position: relative;
+            top: 30%;
+        }
+        .li1
+        {
+            list-style: none;
+            border: 1px solid white;
+            height: 23vh;
+            width: 100%;
+            display: flex;
+        }
+        .piccc
+        {
+            height: 100%;
+            width: 50%;
+        }
+        .h22
+        {
+            height: 100%;
+            width: 50%;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+        .picc
+        {
+            height: 100%;
+            width: 100%;
+        }
+        h2
+        {
+            color: white;
+            font-size: 30px;
+            text-align: center;
+        }
+        .btn1
+        {
+            height: 5vh;
+            width: 33%;
+            border: none;
+            font-family: sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 20px;
+            background-color:red;
+            color: white;
+            cursor: pointer;
+            }
+        .container
+        {
+            height: 100vh;
+            width: 100%;
+            background-image: linear-gradient( to bottom right, rgba(0,0,0.7),rgba(0,0,0,.8)) ;
+            position: absolute;
+            top: 0;
+        }
+        .childdiv
+        {
+            height: 100%;
+            width: 44%;
+            position: relative;
+            left: 28%;
+            /* background-image: linear-gradient( to bottom right, rgba(255, 0, 13, 0.7),rgba(4, 255, 109, 0.9)) ; */
+            overflow-y: scroll;
+            color: white;
+            background-color: white;
+            font-style: italic;
+            font-family: sans-serif ;
+            font-size: 20px;
+ letter-spacing :1px;
+ border: 1px solid #000;
+
+        }
+        .image2
+        {
+            height: 70vh;
+            width: 100%;
+        }
+.btnn{
+height: 25px;
+width: 25px;
+position: absolute;
+top: 0;
+background-color: black;
+border: 10px solid #000;
+left: 0;
+z-index: 200;
+
+}
+
+
+
+
+    </style>
+</head>
+<body>
+    
+    <div class="main">
+        <input type="text" placeholder="EnterFoodName" oninput="getdata()">
+        <ul class="ul1">
+            <h1>Delicious <br> Foods</h1>
+        </ul>
+    </div>
+</body>
+
+<script>
+
+    var input=document.querySelector("input")
+    var ul=document.querySelector(".ul1")
+    var btn=document.querySelectorAll(".btn1")
+
+    function getdata(){
+
+        var value=input.value
+
+        fetch("https://www.themealdb.com/api/json/v1/1/search.php?s="+value)
+        .then(res=>res.json())
+        .then(haha=>showdata(haha.meals))
+    }
+
+    function showdata(haha){
+    
+        var list=""
+        
+        haha.forEach(e => {
+            list+=`<li  class="li1"><div class="piccc"><img src="${e.strMealThumb}" class="picc"></div> <div class="h22"><h2>${e.strMeal}</h2><button class="btn1">ShowMore</button></div></li>`
+        })
+
+        ul.innerHTML=list  
+
+        var btn2=document.querySelectorAll(".btn1")
+        btn2.forEach((e)=>
+        {
+           e.addEventListener("click",(x)=>
+           {
+             var parent= x.target.parentElement.parentElement
+             console.log(parent);
+
+             var name=parent.querySelector("h2").innerText
+
+            var filter=haha.filter((e)=>{
+    
+                return e.strMeal==name
+            })
+
+
+            var div1=document.createElement("div")
+        div1.className=("container")
+        document.body.appendChild(div1)
+
+        var div2=document.createElement("div")
+        div2.className=("childdiv")
+        div1.appendChild(div2)
+        
+        var bttn=document.createElement("button")
+        bttn.className="btnn"
+        bttn.innerText="play to remover "
+        div2.appendChild(bttn)
+        console.log(bttn);
+
+        var showimg=""
+
+        showimg+=`<img src="${filter[0].strMealThumb}" class="image2">`
+
+        div2.innerHTML=showimg
+
+
+        var showind=""
+
+        for(key of filter)
+        {
+            console.log(key);
+            for(value in key)
+            {
+                if(value.includes("strIngredient"))
+                {
+                    div2.innerHTML+=`${key[value]}`
+                    console.log(key[value]);
+
+                }
+            }
+        }
+
+
+            })
+            
+            
+
+        })
+
+        
+
+        
+
+    }
+
+ 
+    
+
+   
+        
+    
+    
+
+
+
+    
+
+    
+</script>
+</html>
